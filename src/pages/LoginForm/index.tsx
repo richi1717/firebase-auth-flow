@@ -11,7 +11,6 @@ import {
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import useLoginUser from '../../api/users/useLoginUser'
-// import useForgotPassword from '../../api/users/useForgotPassword'
 import ControlledTextField from '../../components/ControlledTextField'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
@@ -29,7 +28,7 @@ export default function LoginForm() {
   const [checked, setChecked] = useState(Boolean(emailFromCookie) ?? false)
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
-  // const { mutate: sendForgotPassword } = useForgotPassword()
+
   const {
     handleSubmit,
     reset,
@@ -48,13 +47,14 @@ export default function LoginForm() {
   const handleClickShowPassword = () => setShowPassword((show) => !show)
 
   const onSubmit = handleSubmit((values) => {
-    if (checked) {
-      document.cookie = `rememberMe=${values.email}`
-    }
     loginUser(values, {
       onSuccess: () => {
-        reset()
-        navigate('/goals')
+        if (checked) {
+          document.cookie = `rememberMe=${values.email}`
+          reset({ email: values.email })
+        } else {
+          reset({ email: '' })
+        }
       },
     })
   })

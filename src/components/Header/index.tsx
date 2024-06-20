@@ -46,7 +46,7 @@ export default function Header() {
           <Toolbar disableGutters>
             <Stack direction="row" alignItems="center" sx={{ flexGrow: 1 }}>
               <IconButton
-                href="/goals"
+                href="/"
                 sx={{
                   color: 'common.white',
                 }}

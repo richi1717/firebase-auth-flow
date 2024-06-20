@@ -1,6 +1,5 @@
 import Layout from './components/Layout'
 import { createBrowserRouter } from 'react-router-dom'
-import Goals from './pages/Goals'
 import Verify from './pages/Verify'
 import LoginForm from './pages/LoginForm'
 import CreateAccountForm from './pages/CreateAccountForm'
@@ -47,10 +46,6 @@ const Router = createBrowserRouter([
       {
         path: '/forgot-password',
         element: <ForgotPasswordForm />,
-      },
-      {
-        path: '/goals',
-        element: <Goals />,
       },
       { path: '/verify', element: <Verify /> },
       // {

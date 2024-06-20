@@ -1,8 +1,4 @@
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  updateProfile,
-} from 'firebase/auth'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import initialize from '../initialize'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
@@ -10,15 +6,7 @@ initialize()
 
 const auth = getAuth()
 
-interface UserLoginProps extends UserLogin {
-  verified?: boolean
-}
-
-export const loginUser = async ({
-  email,
-  password,
-  verified,
-}: UserLoginProps) => {
+export const loginUser = async ({ email, password }: UserLogin) => {
   try {
     const userCredential = await signInWithEmailAndPassword(
       auth,
@@ -26,13 +14,7 @@ export const loginUser = async ({
       password,
     )
     const user = userCredential.user
-
-    if (verified) {
-      await updateProfile(user, {
-        emailVerified: true,
-      })
-    }
-
+    console.log(user)
     return user
   } catch (error: unknown) {
     // const errorCode = error.code
@@ -46,11 +28,10 @@ function useLoginUser() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ email, password, verified }: UserLoginProps) =>
-      loginUser({ email, password, verified }),
+    mutationFn: ({ email, password }: UserLogin) =>
+      loginUser({ email, password }),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['user'] })
-      await queryClient.invalidateQueries({ queryKey: ['goals', 'list'] })
       await queryClient.invalidateQueries({ queryKey: ['settings'] })
     },
   })

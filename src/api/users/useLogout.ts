@@ -11,25 +11,25 @@ function useLogout() {
       await signOut(auth)
       return Promise.resolve('successfully logged out')
     },
-    onMutate: async () => {
-      await queryClient.cancelQueries({
-        queryKey: ['goals', 'list'],
-      })
+    // onMutate: async () => {
+    //   await queryClient.cancelQueries({
+    //     queryKey: ['goals', 'list'],
+    //   })
 
-      const snapshot = queryClient.getQueryData(['goals', 'list'])
+    //   const snapshot = queryClient.getQueryData(['goals', 'list'])
 
-      queryClient.setQueryData(['goals', 'list'], () => ({}))
-      queryClient.setQueryData(['user'], () => ({}))
+    //   queryClient.setQueryData(['goals', 'list'], () => ({}))
+    //   queryClient.setQueryData(['user'], () => ({}))
 
-      return () => {
-        queryClient.setQueryData(['goals', 'list'], snapshot)
-      }
-    },
-    onError: (_error, _variables, rollback) => {
-      rollback?.()
-    },
+    //   return () => {
+    //     queryClient.setQueryData(['goals', 'list'], snapshot)
+    //   }
+    // },
+    // onError: (_error, _variables, rollback) => {
+    //   rollback?.()
+    // },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['goals', 'list'] })
+      // await queryClient.invalidateQueries({ queryKey: ['goals', 'list'] })
       await queryClient.invalidateQueries({ queryKey: ['user'] })
       await queryClient.invalidateQueries({ queryKey: ['settings'] })
     },

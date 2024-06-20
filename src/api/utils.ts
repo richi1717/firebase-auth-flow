@@ -9,7 +9,6 @@ export function useInvalidateCommonQueries(): UseInvalidateCommonQueries {
 
   const resetQueries = async () => {
     await queryClient.invalidateQueries({ queryKey: ['user'] })
-    await queryClient.invalidateQueries({ queryKey: ['goals', 'list'] })
     await queryClient.invalidateQueries({ queryKey: ['settings'] })
   }
 

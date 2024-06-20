@@ -40,7 +40,7 @@ export default function CreateAccountForm() {
     createUser(values, {
       onSuccess: () => {
         reset()
-        navigate('/goals')
+        // navigate('/goals')
       },
     })
   })

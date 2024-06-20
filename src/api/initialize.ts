@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app'
 
 const config = {
-  appName: 'Goals',
+  appName: 'Firebase auth flow',
   authDomain: import.meta.env.VITE_AUTH_DOMAIN,
   databaseURL: import.meta.env.VITE_DB_URL,
   apiKey: import.meta.env.VITE_API_KEY,

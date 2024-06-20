@@ -28,12 +28,13 @@ function useCreateUser() {
       await updateProfile(userCredential.user, {
         displayName,
       })
-      await sendEmailVerification(userCredential.user)
+      await sendEmailVerification(userCredential.user, {
+        url: import.meta.env.VITE_APP_URL,
+      })
       return Promise.resolve(userCredential.user)
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['user'] })
-      await queryClient.invalidateQueries({ queryKey: ['goals', 'list'] })
       await queryClient.invalidateQueries({ queryKey: ['settings'] })
     },
   })
