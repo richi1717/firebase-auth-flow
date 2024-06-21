@@ -20,7 +20,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import schema from './schema'
 
 export default function CreateAccountForm() {
-  const { mutate: createUser, isError } = useCreateUser()
+  const { mutate: createUser, isError, status } = useCreateUser()
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
   const {
@@ -102,7 +102,12 @@ export default function CreateAccountForm() {
         </CardContent>
         <CardActions sx={{ px: 2 }}>
           <Stack spacing={2} alignItems="flex-start" width={1}>
-            <StyledButton type="submit" fullWidth disabled={!isValid}>
+            <StyledButton
+              type="submit"
+              fullWidth
+              disabled={!isValid}
+              loading={status === 'pending'}
+            >
               Create
             </StyledButton>
             <StyledButton variant="text" onClick={() => navigate('/')}>

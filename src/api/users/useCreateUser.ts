@@ -5,7 +5,8 @@ import {
   sendEmailVerification,
 } from 'firebase/auth'
 import initialize from '../initialize'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
+import { useInvalidateCommonQueries } from '../utils'
 
 initialize()
 
@@ -16,7 +17,7 @@ interface CreateLogin extends UserLogin {
 }
 
 function useCreateUser() {
-  const queryClient = useQueryClient()
+  const { resetQueries } = useInvalidateCommonQueries()
 
   return useMutation({
     mutationFn: async ({ email, password, displayName }: CreateLogin) => {
@@ -25,17 +26,19 @@ function useCreateUser() {
         email,
         password,
       )
+
       await updateProfile(userCredential.user, {
         displayName,
       })
+
       await sendEmailVerification(userCredential.user, {
         url: import.meta.env.VITE_APP_URL,
       })
+
       return Promise.resolve(userCredential.user)
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['user'] })
-      await queryClient.invalidateQueries({ queryKey: ['settings'] })
+      await resetQueries()
     },
   })
 }

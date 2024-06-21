@@ -1,6 +1,7 @@
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import initialize from '../initialize'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
+import { useInvalidateCommonQueries } from '../utils'
 
 initialize()
 
@@ -14,25 +15,22 @@ export const loginUser = async ({ email, password }: UserLogin) => {
       password,
     )
     const user = userCredential.user
-    console.log(user)
+
     return user
   } catch (error: unknown) {
-    // const errorCode = error.code
-    // const errorMessage = error.message
     console.error(error)
     throw new Error('Unauthorized: incorrect email or password')
   }
 }
 
 function useLoginUser() {
-  const queryClient = useQueryClient()
+  const { resetQueries } = useInvalidateCommonQueries()
 
   return useMutation({
     mutationFn: ({ email, password }: UserLogin) =>
       loginUser({ email, password }),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['user'] })
-      await queryClient.invalidateQueries({ queryKey: ['settings'] })
+      await resetQueries()
     },
   })
 }

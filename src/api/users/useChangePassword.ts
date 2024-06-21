@@ -33,9 +33,8 @@ export const changePassword = async ({
 
     return user
   } catch (error: unknown) {
-    // const errorCode = error.code
-    // const errorMessage = error.message
     console.error(error)
+
     throw new Error('Encountered an issue')
   }
 }

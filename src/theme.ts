@@ -1,5 +1,6 @@
 import { createTheme } from '@mui/material/styles'
 import { grey } from '@mui/material/colors'
+import merge from 'deepmerge'
 
 declare module '@mui/material/styles' {
   interface BreakpointOverrides {
@@ -14,52 +15,58 @@ declare module '@mui/material/styles' {
   }
 }
 
-export default (mode: 'dark' | 'light' = 'dark') =>
-  createTheme({
-    typography: {
-      fontFamily: [
-        '-apple-system',
-        'Inter',
-        '"Segoe UI"',
-        'Roboto',
-        '"Helvetica Neue"',
-        'Arial',
-        'sans-serif',
-        '"Apple Color Emoji"',
-        '"Segoe UI Emoji"',
-        '"Segoe UI Symbol"',
-      ].join(','),
+type MyMode = 'dark' | 'light' | undefined
+
+const defaultTheme = (mode: MyMode) => ({
+  typography: {
+    fontFamily: [
+      '-apple-system',
+      'Inter',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+  },
+  palette: {
+    mode,
+    ...(mode === 'dark'
+      ? {
+          background: {
+            default: '#0f1418',
+          },
+          text: {
+            primary: 'rgb(255, 255, 255)',
+            secondary: grey[500],
+          },
+          primary: { main: '#6e43a3' },
+        }
+      : {
+          primary: { main: '#410060' },
+          background: {
+            default: grey[100],
+            paper: grey[100],
+          },
+          text: {
+            primary: grey[700],
+            secondary: grey[500],
+          },
+        }),
+  },
+  breakpoints: {
+    values: {
+      mobile: 0,
+      tablet: 640,
+      desktop: 1024,
     },
-    palette: {
-      mode,
-      ...(mode === 'dark'
-        ? {
-            background: {
-              default: '#0f1418',
-            },
-            text: {
-              primary: 'rgb(255, 255, 255)',
-              secondary: grey[500],
-            },
-            primary: { main: '#6e43a3' },
-          }
-        : {
-            primary: { main: '#410060' },
-            background: {
-              default: grey[100],
-              paper: grey[100],
-            },
-            text: {
-              primary: grey[700],
-              secondary: grey[500],
-            },
-          }),
-    },
-    breakpoints: {
-      values: {
-        mobile: 0,
-        tablet: 640,
-        desktop: 1024,
-      },
-    },
-  })
+  },
+})
+
+const passedTheme = {}
+
+export default (mode: MyMode = 'dark') =>
+  createTheme(merge(defaultTheme(mode), passedTheme))

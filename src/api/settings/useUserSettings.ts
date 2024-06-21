@@ -11,10 +11,9 @@ async function fetchSettings(userId?: string) {
       const settings = snapshot.val()
 
       return Promise.resolve(settings)
-    } else {
-      console.log('No data available')
     }
-    return {}
+
+    return Promise.reject('Something went wrong or no data available')
   } catch (error: unknown) {
     console.error(error)
   }
